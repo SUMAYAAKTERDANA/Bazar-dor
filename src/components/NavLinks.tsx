@@ -1,11 +1,5 @@
 import Link from 'next/link';
-
-interface Navs {
-    id: string;
-    slug: string;
-    nameBn: string;
-    icon: string;
-}
+import type { Category } from '@/types';
 
 const NavLinks = async () => {
     const res = await fetch(
@@ -13,16 +7,18 @@ const NavLinks = async () => {
         { cache: 'no-store' }
     );
 
-    if (!res.ok) {
-        return <div>Data load হয়নি</div>;
-    }
+    if (!res.ok) return null;
 
-    const categories: Navs[] = await res.json();
+    const categories: Category[] = await res.json();
 
     return (
-        <nav className="flex gap-3">
+        <nav className="flex gap-5 overflow-x-auto">
             {categories.map((cat) => (
-                <Link key={cat.id} href={`/category/${cat.slug}`}>
+                <Link
+                    key={cat.id}
+                    href={`/category/${cat.slug}`}
+                    className="flex items-center gap-1 text-sm font-medium hover:text-[#05893E] whitespace-nowrap"
+                >
                     <span>{cat.icon}</span>
                     <span>{cat.nameBn}</span>
                 </Link>
