@@ -1,36 +1,37 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+Project Name:
+BazarDor (বাজার দর) — Daily market prices at a glance.
 
-## Getting Started
 
-First, run the development server:
+Short Description:
+BazarDor is an online app for viewing daily market prices in Bangladesh. Users can browse today's prices for rice, lentils, oil, vegetables, fish, meat, eggs-milk, and spices, along with the price change indicator (▲/▼), and see the minimum-maximum prices across 12 different markets in one place. Users can create their own account, update their profile, and after logging in, view detailed bazar-wise information for each product. The entire app is built with Next.js and matches the Figma design exactly.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Technologies Used:
+Next.js 16 — React framework (using App Router, Turbopack)
+TypeScript — A type-safe version of JavaScript
+Tailwind CSS v4 + DaisyUI — For styling the UI
+Noto Serif Bengali (next/font) — For clean Bengali typography
+BetterAuth — For email/password authentication
+MongoDB Atlas — To store user accounts and sessions
+react-hot-toast — For showing clean toast notifications
+react-marquee-text — For infinite scrolling price ticker
+Vercel — For deployment
+Figma — For the UI design reference
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+5 Key Features:
 
-## Learn More
+1. Live Price Ticker with Scrolling Marquee
+The navbar contains an infinite scrolling price ticker built with react-marquee-text. Every product (all 33 items) scrolls continuously showing the emoji, name, today's price (in Bengali digits — ১৪৮ টাকা), unit (প্রতি কেজি / লিটার / ডজন), and change indicator (▲ ২.১% up in red, ▼ ২.৯% down in green). Each item is a clickable link that navigates to that product's detail page.
 
-To learn more about Next.js, take a look at the following resources:
+2. Category Browsing with Bengali Sort
+Every category — চাল (rice), ডাল (lentils), তেল (oil), সবজি (vegetables), মাছ (fish), মাংস (meat), ডিম-দুধ (eggs-milk), মসলা (spices) — has its own page (/category/[slug]). The Sort dropdown (সাজান: ডিফল্ট | দাম: কম থেকে বেশি | দাম: বেশি থেকে কম) re-orders the products instantly by actual numeric value, correctly handling Bengali numerals. Invalid slugs show a friendly empty state with a "হোম পেজে ফিরে যান" button.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+3. Protected Product Details with Bazar-wise Table
+Every product page (/product/[slug]) requires login — otherwise it redirects to /sign-in. Once logged in, users see: today's price, min/max/average price across 12 bazaars, price difference from yesterday (in টাকা and percentage), and a complete bazar-wise table listing the minimum, maximum, and average price of each bazar — covering কারওয়ান বাজার, গ্রীন মার্কেট, চট্টগ্রাম, রাজশাহী, খুলনা, সিলেট, and more.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+4. Email/Password Authentication with BetterAuth
+Users can sign up and sign in using email and password via BetterAuth, with accounts stored in MongoDB Atlas. The header shows "সাইন ইন / সাইন আপ" buttons when logged out, and a user avatar with a dropdown menu (প্রোফাইল + সাইন আউট) when logged in. Every auth action shows a relevant toast notification (loading / success / error). Protected routes (product details, profile) automatically redirect unauthenticated users.
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+5. Profile Page with Update Information
+The /profile route shows the logged-in user's name, email, and verification status. A "প্রোফাইল আপডেট করুন" button leads to /profile/update where users can change their display name using BetterAuth's updateUser method. Success shows a green toast and redirects back to /profile. A clean, Figma-accurate design — fully responsive across mobile, tablet, and desktop.
