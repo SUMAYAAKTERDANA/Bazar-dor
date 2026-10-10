@@ -21,12 +21,12 @@ export default function CategorySort({
     };
 
     return (
-        <div className="flex items-center gap-2">
-            <label className="text-sm text-gray-600">সাজান:</label>
+        <div className="flex items-center gap-2 bg-white border border-gray-200 rounded-md px-3 py-1.5">
+            <span className="text-sm text-gray-600">সাজান:</span>
             <select
                 value={currentSort || 'default'}
                 onChange={handleChange}
-                className="select select-bordered select-sm"
+                className="text-sm bg-transparent border-0 focus:outline-none cursor-pointer"
             >
                 <option value="default">ডিফল্ট</option>
                 <option value="low-to-high">দাম: কম থেকে বেশি</option>

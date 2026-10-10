@@ -68,7 +68,7 @@ async function HomeContent() {
 
     return (
         <div className="space-y-10">
-            {/* ===== আজ দাম বেড়েছে ===== */}
+            {/*  আজ দাম বেড়েছে */}
             {increasing.length > 0 && (
                 <section>
                     <div className="flex items-center gap-2 mb-4">
