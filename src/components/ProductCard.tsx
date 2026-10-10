@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import type { Product } from '@/types';
+import { formatBn, toBn } from '@/lib/bn';
 
 export default function ProductCard({ product }: { product: Product }) {
     const isUp = product.change.dir === 'up';
@@ -36,24 +37,24 @@ export default function ProductCard({ product }: { product: Product }) {
                         আজকের দাম
                     </p>
                     <p className="text-base font-bold text-gray-900">
-                        {product.today} টাকা
+                        {formatBn(product.today)} টাকা
                     </p>
                 </div>
 
                 <div className="pb-0.5">
                     {isUp && (
                         <span className="text-[11px] font-medium text-red-500">
-                            ▲ {Math.abs(product.change.pct)}%
+                            ▲ {toBn(Math.abs(product.change.pct))}%
                         </span>
                     )}
                     {isDown && (
                         <span className="text-[11px] font-medium text-green-600">
-                            ▼ {Math.abs(product.change.pct)}%
+                            ▼ {toBn(Math.abs(product.change.pct))}%
                         </span>
                     )}
                     {!isUp && !isDown && (
                         <span className="text-[11px] font-medium text-gray-400">
-                            — 0.0%
+                            — {toBn(0)}%
                         </span>
                     )}
                 </div>

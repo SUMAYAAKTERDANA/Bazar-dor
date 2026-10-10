@@ -1,10 +1,13 @@
-import MarqueeText from "react-marquee-text"
-import "react-marquee-text/dist/styles.css"
+import MarqueeText from 'react-marquee-text';
+import 'react-marquee-text/dist/styles.css';
+import Link from 'next/link';
+import { formatBn, toBn } from '@/lib/bn';
 
 interface Product {
-    id: string;
+    id: number;
     slug: string;
     nameBn: string;
+    image: string;
     categoryIcon: string;
     unit: string;
     today: number;
@@ -21,44 +24,59 @@ const Marquee = async () => {
     );
 
     if (!res.ok) {
-        return <div className="text-red-500">Data load হয়নি</div>;
+        return <div className="text-red-500 p-2">Data load হয়নি</div>;
     }
 
     const data: Product[] = await res.json();
-    const top10 = data.slice(0, 10);
+    // সব product দেখাবে (slice বাদ দেওয়া হয়েছে)
+
+    const unitBangla = (unit: string) =>
+        unit === 'kg' ? 'কেজি' :
+        unit === 'litre' ? 'লিটার' :
+        unit === 'dozen' ? 'ডজন' :
+        unit === 'piece' ? 'পিস' : unit;
 
     return (
-        <div className="w-full overflow-hidden bg-white text-black border-y">
-            
-<MarqueeText direction="right" duration={10}>         
-            <div className="marquee-track flex gap-6 py-2 whitespace-nowrap">
-                {[...top10, ...top10].map((d, index) => (
-                    <span
-                        key={`${d.id}-${index}`}
-                        className="flex items-center gap-2 text-sm"
-                    >
-                        <span>{d.categoryIcon}</span>
-                        <span>{d.nameBn}</span>
-                        <span className="font-bold">৳{d.today}</span>
-                        <span className="opacity-80">/ {d.unit}</span>
-                        {d.change?.pct !== undefined && (
-                            <span
-                                className={
-                                    d.change.dir === 'up'
-                                        ? 'text-red-300'
-                                        : 'text-green-300'
-                                }
-                            >
-                                {d.change.dir === 'up' ? '▲' : '▼'}{' '}
-                                {Math.abs(d.change.pct)}%
-                            </span>
-                        )}
-                    </span>
-                ))}
-           
-            </div>
+        <div className="w-full bg-white border-y border-gray-200">
+            <MarqueeText
+                direction="right"
+                duration={8}
+                className="py-1"
+            >
+                <div className="flex gap-6 whitespace-nowrap">
+                    {data.map((p, index) => {
+                        const isUp = p.change.dir === 'up';
+                        const isDown = p.change.dir === 'down';
 
-            </MarqueeText>    
+                        return (
+                            <Link
+                                key={`${p.id}-${index}`}
+                                href={`/product/${p.slug}`}
+                                className="flex items-center gap-2 text-sm hover:text-[#05893E] transition-colors"
+                            >
+                                <span>{p.image}</span>
+                                <span className="font-medium">{p.nameBn}</span>
+                                <span className="font-bold text-[#05893E]">
+                                    {formatBn(p.today)} টাকা
+                                </span>
+                                <span className="text-xs text-gray-500">
+                                    / {unitBangla(p.unit)}
+                                </span>
+                                {isUp && (
+                                    <span className="text-xs font-medium text-red-500">
+                                        ▲ {toBn(Math.abs(p.change.pct))}%
+                                    </span>
+                                )}
+                                {isDown && (
+                                    <span className="text-xs font-medium text-green-500">
+                                        ▼ {toBn(Math.abs(p.change.pct))}%
+                                    </span>
+                                )}
+                            </Link>
+                        );
+                    })}
+                </div>
+            </MarqueeText>
         </div>
     );
 };

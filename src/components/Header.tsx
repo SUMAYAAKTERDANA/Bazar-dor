@@ -1,14 +1,16 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import NavLinks from './NavLinks';
+import Marquee from './Marquee';
+import UserMenu from './UserMenu';
 import { Suspense } from 'react';
 import { connection } from 'next/server';
 
 const CurrentDate = async () => {
     await connection();
-    const date = new Date().toLocaleDateString("bn-BD", {
-        dateStyle: "full",
-        timeZone: "Asia/Dhaka",
+    const date = new Date().toLocaleDateString('bn-BD', {
+        dateStyle: 'full',
+        timeZone: 'Asia/Dhaka',
     });
     return <p className="text-xs text-gray-600">{date}</p>;
 };
@@ -16,7 +18,7 @@ const CurrentDate = async () => {
 const Header = () => {
     return (
         <header className="bg-white border-b">
-            
+            {/* Top Bar */}
             <div className="flex items-center justify-between px-4 py-3">
                 <Link href="/" className="flex items-center gap-2">
                     <div className="w-12 h-12 bg-[#05893E] rounded-2xl flex items-center justify-center">
@@ -36,24 +38,23 @@ const Header = () => {
                     </div>
                 </Link>
 
-                <div className="flex gap-2">
-                    <Link href="/signin" className="btn btn-sm btn-outline">
-                        সাইন ইন
-                    </Link>
-                    <Link href="/signup" className="btn btn-sm bg-[#05893E] text-white">
-                        সাইন আপ
-                    </Link>
-                </div>
+                {/* UserMenu replaces old Sign In/Up buttons */}
+                <UserMenu />
             </div>
 
-            
-            <div className="border-t bg-gray-50">
+            {/* Nav */}
+            <div className="border-t bg-white">
                 <div className="flex justify-center px-4 py-2">
                     <Suspense fallback={<div className="text-sm">Loading...</div>}>
                         <NavLinks />
                     </Suspense>
                 </div>
             </div>
+
+            {/* Marquee */}
+            <Suspense fallback={<div className="h-10 bg-gray-100"></div>}>
+                <Marquee />
+            </Suspense>
         </header>
     );
 };

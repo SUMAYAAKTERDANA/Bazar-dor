@@ -3,7 +3,7 @@ import { Noto_Serif_Bengali } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-// import Footer from "@/components/Footer";
+import ToasterProvider from "@/components/ToasterProvider";
 
 const notoSerifBengali = Noto_Serif_Bengali({
   subsets: ["latin", "bengali"],
@@ -18,6 +18,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="bn" data-theme="light" className={`${notoSerifBengali.className} h-full antialiased`}>
       <body className="min-h-full flex flex-col bg-[#F7F9F7]">
+        <ToasterProvider />
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />

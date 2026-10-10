@@ -15,6 +15,7 @@
     "next": "16.4.0",
     "react": "19.3.0",
     "react-dom": "19.3.0",
+    "react-hot-toast": "^2.6.1",
     "react-marquee-text": "^1.0.6"
   },
   "devDependencies": {

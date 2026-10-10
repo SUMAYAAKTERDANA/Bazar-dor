@@ -1,5 +1,9 @@
 import Link from 'next/link';
+import { headers } from 'next/headers';
+import { redirect } from 'next/navigation';
+import { auth } from '@/lib/auth';
 import type { Product } from '@/types';
+import { formatBn, toBn } from '@/lib/bn';
 
 async function fetchAllProducts(): Promise<Product[]> {
     try {
@@ -19,11 +23,19 @@ export default async function ProductPage({
 }: {
     params: Promise<{ slug: string }>;
 }) {
+    // Protected route
+    const session = await auth.api.getSession({
+        headers: await headers(),
+    });
+
+    if (!session?.user) {
+        redirect('/sign-in');
+    }
+
     const { slug } = await params;
     const products = await fetchAllProducts();
     const product = products.find((p) => p.slug === slug);
 
-    // Not found
     if (!product) {
         return (
             <div className="text-center py-16 px-4">
@@ -80,10 +92,9 @@ export default async function ProductPage({
                 <span className="text-gray-700">{product.nameBn}</span>
             </div>
 
-            {/* ===== Top Summary ===== */}
+            {/* Top Summary */}
             <div className="bg-white rounded-lg border p-5 mb-4">
                 <div className="flex flex-col sm:flex-row justify-between gap-4">
-                    {/* Left */}
                     <div className="flex items-start gap-4 flex-1">
                         <div className="w-16 h-16 bg-gray-50 rounded-lg flex items-center justify-center text-4xl shrink-0">
                             {product.image}
@@ -91,7 +102,6 @@ export default async function ProductPage({
                         <div className="flex-1">
                             <h1 className="text-xl font-bold">{product.nameBn}</h1>
 
-                            {/* Tags */}
                             <div className="flex gap-2 mt-2 flex-wrap">
                                 <span className="text-[11px] bg-[#E8F5E9] text-[#05893E] px-2 py-0.5 rounded">
                                     {product.categoryIcon} {product.categoryNameBn}
@@ -101,7 +111,6 @@ export default async function ProductPage({
                                 </span>
                             </div>
 
-                            {/* Change line with টাকা */}
                             {isUp && (
                                 <p className="text-xs text-gray-600 mt-2">
                                     গতকালের তুলনায় আজ দাম{' '}
@@ -110,7 +119,7 @@ export default async function ProductPage({
                                     </span>
                                     {' · '}
                                     <span className="font-medium">
-                                        {priceDiff} টাকা
+                                        {formatBn(priceDiff)} টাকা
                                     </span>
                                 </p>
                             )}
@@ -122,7 +131,7 @@ export default async function ProductPage({
                                     </span>
                                     {' · '}
                                     <span className="font-medium">
-                                        {priceDiff} টাকা
+                                        {formatBn(priceDiff)} টাকা
                                     </span>
                                 </p>
                             )}
@@ -137,34 +146,33 @@ export default async function ProductPage({
                         </div>
                     </div>
 
-                    {/* Right: price badge */}
                     <div className="bg-[#E8F5E9] rounded-lg p-4 text-center shrink-0 sm:w-36">
                         <p className="text-[11px] text-gray-600">আজকের দাম</p>
                         <p className="text-2xl font-bold text-[#05893E] mt-1">
-                            {product.today} টাকা
+                            {formatBn(product.today)} টাকা
                         </p>
                         {isUp && (
                             <p className="text-[11px] font-medium text-red-500 mt-1">
-                                ▲ {Math.abs(product.change.pct)}%
+                                ▲ {toBn(Math.abs(product.change.pct))}%
                             </p>
                         )}
                         {isDown && (
                             <p className="text-[11px] font-medium text-green-500 mt-1">
-                                ▼ {Math.abs(product.change.pct)}%
+                                ▼ {toBn(Math.abs(product.change.pct))}%
                             </p>
                         )}
                     </div>
                 </div>
             </div>
 
-            {/* ===== দামের সারাংশ ===== */}
+            {/* দামের সারাংশ */}
             <div className="bg-white rounded-lg border p-5 mb-4">
                 <h2 className="font-bold text-sm mb-3">দামের সারাংশ</h2>
                 <div className="grid grid-cols-3 gap-3">
                     <div className="bg-[#E8F5E9] rounded-lg p-3">
                         <p className="text-[11px] text-gray-600">সর্বনিম্ন দাম</p>
                         <p className="text-lg font-bold text-[#05893E] mt-1">
-                            {minPrice} টাকা
+                            {formatBn(minPrice)} টাকা
                         </p>
                         <p className="text-[10px] text-gray-500">
                             সর্বনিম্ন বাজার দর
@@ -173,7 +181,7 @@ export default async function ProductPage({
                     <div className="bg-red-50 rounded-lg p-3">
                         <p className="text-[11px] text-gray-600">সর্বোচ্চ দাম</p>
                         <p className="text-lg font-bold text-red-600 mt-1">
-                            {maxPrice} টাকা
+                            {formatBn(maxPrice)} টাকা
                         </p>
                         <p className="text-[10px] text-gray-500">
                             সর্বোচ্চ বাজার দর
@@ -182,7 +190,7 @@ export default async function ProductPage({
                     <div className="bg-gray-50 rounded-lg p-3">
                         <p className="text-[11px] text-gray-600">গড় দাম</p>
                         <p className="text-lg font-bold text-gray-800 mt-1">
-                            {avgPrice} টাকা
+                            {formatBn(avgPrice)} টাকা
                         </p>
                         <p className="text-[10px] text-gray-500">
                             সব বাজারের গড়
@@ -191,7 +199,7 @@ export default async function ProductPage({
                 </div>
             </div>
 
-            {/* ===== বাজারভিত্তিক টেবিল ===== */}
+            {/* বাজারভিত্তিক টেবিল */}
             {markets.length > 0 && (
                 <div className="bg-white rounded-lg border p-5">
                     <h2 className="font-bold text-sm mb-3">
@@ -224,13 +232,13 @@ export default async function ProductPage({
                                             {m.division}
                                         </td>
                                         <td className="p-3 text-right text-green-600">
-                                            {m.min} টাকা
+                                            {formatBn(m.min)} টাকা
                                         </td>
                                         <td className="p-3 text-right text-red-600">
-                                            {m.max} টাকা
+                                            {formatBn(m.max)} টাকা
                                         </td>
                                         <td className="p-3 text-right font-medium">
-                                            {Math.round((m.min + m.max) / 2)} টাকা
+                                            {formatBn(Math.round((m.min + m.max) / 2))} টাকা
                                         </td>
                                     </tr>
                                 ))}

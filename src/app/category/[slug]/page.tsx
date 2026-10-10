@@ -3,6 +3,7 @@ import Link from 'next/link';
 import ProductCard from '@/components/ProductCard';
 import CategorySort from '@/components/CategorySort';
 import type { Product } from '@/types';
+import { toBn } from '@/lib/bn';
 
 async function fetchCategoryProducts(slug: string): Promise<Product[] | null> {
     try {
@@ -58,7 +59,7 @@ async function CategoryContent({
 
     return (
         <>
-            {/* Category Header — সাদা box */}
+            {/* Category Header */}
             <div className="bg-white rounded-lg border border-gray-200 p-4 mb-3">
                 <div className="flex items-center gap-3">
                     <div className="w-12 h-12 bg-[#F7F9F7] rounded-lg flex items-center justify-center text-2xl shrink-0">
@@ -67,13 +68,13 @@ async function CategoryContent({
                     <div>
                         <h1 className="text-lg font-bold">{categoryName}</h1>
                         <p className="text-xs text-gray-500 mt-0.5">
-                            {categoryName} এর আজকের দাম · মোট {products.length}টি পণ্য দেখানো হচ্ছে
+                            {categoryName} এর আজকের দাম · মোট {toBn(products.length)}টি পণ্য দেখানো হচ্ছে
                         </p>
                     </div>
                 </div>
             </div>
 
-            {/* Sort row — ডান দিকে */}
+            {/* Sort row */}
             <div className="flex justify-end mb-4">
                 <CategorySort currentSort={sort} slug={slug} />
             </div>
