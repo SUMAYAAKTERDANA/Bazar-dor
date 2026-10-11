@@ -29,29 +29,36 @@ export default async function ProductPage({
     });
 
     if (!session?.user) {
-        redirect('/sign-in');
+        redirect('/sign-in?redirected=protected');
     }
 
     const { slug } = await params;
     const products = await fetchAllProducts();
     const product = products.find((p) => p.slug === slug);
 
+    // Product not found
     if (!product) {
         return (
-            <div className="text-center py-16 px-4">
-                <div className="text-6xl mb-4">🔍</div>
-                <h1 className="text-xl font-bold text-gray-800 mb-2">
-                    পণ্য পাওয়া যায়নি
-                </h1>
-                <p className="text-sm text-gray-600 mb-6">
-                    &ldquo;{slug}&rdquo; নামে কোনো পণ্য নেই।
-                </p>
-                <Link
-                    href="/"
-                    className="btn btn-sm bg-[#05893E] text-white hover:bg-[#046b30]"
-                >
-                    ← হোম পেজে ফিরে যান
-                </Link>
+            <div className="min-h-[70vh] flex items-center justify-center px-4">
+                <div className="text-center max-w-md">
+                    <div className="text-8xl mb-4">🔍</div>
+                    <h1 className="text-5xl font-bold text-[#05893E] mb-2">
+                        ৪০৪
+                    </h1>
+                    <h2 className="text-xl font-bold text-gray-800 mb-3">
+                        পণ্য পাওয়া যায়নি
+                    </h2>
+                    <p className="text-sm text-gray-600 mb-6">
+                        &ldquo;{slug}&rdquo; নামে কোনো পণ্য নেই। সম্ভবত লিংকটি
+                        ভুল বা পণ্যটি সরিয়ে ফেলা হয়েছে।
+                    </p>
+                    <Link
+                        href="/"
+                        className="inline-flex items-center gap-2 bg-[#05893E] text-white px-6 py-2.5 rounded-md hover:bg-[#046b30] text-sm font-medium transition-colors"
+                    >
+                        ← হোম পেজে ফিরে যান
+                    </Link>
+                </div>
             </div>
         );
     }
@@ -93,7 +100,7 @@ export default async function ProductPage({
             </div>
 
             {/* Top Summary */}
-            <div className="bg-white rounded-lg border p-5 mb-4">
+            <div className="bg-white rounded-lg border border-gray-100 p-5 mb-4">
                 <div className="flex flex-col sm:flex-row justify-between gap-4">
                     <div className="flex items-start gap-4 flex-1">
                         <div className="w-16 h-16 bg-gray-50 rounded-lg flex items-center justify-center text-4xl shrink-0">
@@ -165,8 +172,8 @@ export default async function ProductPage({
                 </div>
             </div>
 
-            {/* দামের সারাংশ */}
-            <div className="bg-white rounded-lg border p-5 mb-4">
+            {/* price summary */}
+            <div className="bg-white rounded-lg border border-gray-100 p-5 mb-4">
                 <h2 className="font-bold text-sm mb-3">দামের সারাংশ</h2>
                 <div className="grid grid-cols-3 gap-3">
                     <div className="bg-[#E8F5E9] rounded-lg p-3">
@@ -199,9 +206,9 @@ export default async function ProductPage({
                 </div>
             </div>
 
-            {/* বাজারভিত্তিক টেবিল */}
+            {/* table */}
             {markets.length > 0 && (
-                <div className="bg-white rounded-lg border p-5">
+                <div className="bg-white rounded-lg border border-gray-100 p-5">
                     <h2 className="font-bold text-sm mb-3">
                         বাজারভিত্তিক আজকের দাম
                     </h2>

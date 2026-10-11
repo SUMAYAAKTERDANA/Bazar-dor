@@ -4,7 +4,7 @@ export function toBn(number: number | string): string {
     return String(number).replace(/\d/g, (d) => bnDigits[Number(d)]);
 }
 
-// Format with Bengali thousands separator (১,৮৫০)
+// Format with Bengali thousands separator 
 export function formatBn(number: number): string {
     const formatted = number.toLocaleString('en-IN'); // 1,850
     return toBn(formatted);

@@ -5,7 +5,7 @@ import Link from 'next/link';
 import ProductCard from '@/components/ProductCard';
 import type { Category, Product } from '@/types';
 
-// ============ Dynamic Date ============
+// Dynamic Date 
 const CurrentDate = async () => {
     await connection();
     const date = new Date().toLocaleDateString('bn-BD', {
@@ -19,7 +19,7 @@ const CurrentDate = async () => {
     );
 };
 
-// ============ Fetch Data ============
+//  Fetch Data 
 async function fetchHomeData(): Promise<{
     categories: Category[];
     products: Product[];
@@ -45,7 +45,7 @@ async function fetchHomeData(): Promise<{
     }
 }
 
-// ============ Home Content ============
+//  Home Content 
 async function HomeContent() {
     const data = await fetchHomeData();
 
@@ -65,7 +65,9 @@ async function HomeContent() {
 
     return (
         <div className="space-y-10">
-            {/* আজ দাম বেড়েছে */}
+
+            {/*increasing price */}
+
             {increasing.length > 0 && (
                 <section>
                     <div className="flex items-center gap-2 mb-4">
@@ -82,7 +84,7 @@ async function HomeContent() {
                 </section>
             )}
 
-            {/* আজ দাম কমেছে */}
+            {/* decreasing price */}
             {decreasing.length > 0 && (
                 <section>
                     <div className="flex items-center gap-2 mb-4">
@@ -99,7 +101,7 @@ async function HomeContent() {
                 </section>
             )}
 
-            {/* সব পণ্য */}
+            {/* ALL PRODUCT */}
             <section id="products">
                 <div className="flex items-center justify-between mb-4">
                     <h2 className="font-bold text-xl text-gray-800">সব পণ্য</h2>
@@ -117,7 +119,8 @@ async function HomeContent() {
     );
 }
 
-// ============ HOME PAGE ============
+//HOME PAGE
+
 export default function Home() {
     return (
         <div className="max-w-6xl mx-auto px-4 py-6">

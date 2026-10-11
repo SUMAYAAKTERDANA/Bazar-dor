@@ -52,7 +52,7 @@ export default async function ProfilePage() {
                     </Link>
                 </div>
 
-                {/* তথ্য Section */}
+                {/* information Section */}
                 <div>
                     <h2 className="text-sm font-semibold text-gray-700 mb-3">
                         তথ্য
