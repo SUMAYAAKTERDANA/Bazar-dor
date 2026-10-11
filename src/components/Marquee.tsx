@@ -28,8 +28,7 @@ const Marquee = async () => {
     }
 
     const data: Product[] = await res.json();
-    // সব product দেখাবে (slice বাদ দেওয়া হয়েছে)
-
+    
     const unitBangla = (unit: string) =>
         unit === 'kg' ? 'কেজি' :
         unit === 'litre' ? 'লিটার' :

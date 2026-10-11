@@ -70,7 +70,7 @@ export default function SignInPage() {
     };
 
     return (
-        <div className="min-h-[80vh] flex items-center justify-center px-4 py-8 bg-[#F7F9F7]">
+        <div className="min-h-[80vh] flex items-center justify-center px-4 py-8 bg-[#FAFBFA]">
             <div className="w-full max-w-md">
                 <div className="bg-white rounded-lg border border-gray-200 p-8">
                     {/* Header */}
@@ -111,8 +111,9 @@ export default function SignInPage() {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
+                                minLength={8}
                                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-[#05893E] text-sm"
-                                placeholder="কমপক্ষে ৬ অক্ষর"
+                                placeholder="কমপক্ষে ৮ অক্ষর"
                             />
                         </div>
 

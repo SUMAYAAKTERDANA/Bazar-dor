@@ -2,9 +2,10 @@ import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
+import ProfileUpdateForm from '@/components/ProfileUpdateForm';
 
 export default async function ProfilePage() {
-    // Protected route — must be logged in
+    // Protected route
     const session = await auth.api.getSession({
         headers: await headers(),
     });
@@ -18,44 +19,45 @@ export default async function ProfilePage() {
 
     return (
         <div className="max-w-2xl mx-auto px-4 py-8">
-            <div className="bg-white rounded-lg border border-gray-200 p-6">
+            <div className="bg-white rounded-lg border border-gray-100 p-6">
                 {/* Header */}
-                <div className="flex items-center gap-4 pb-5 border-b">
-                    <div className="w-16 h-16 rounded-full bg-[#05893E] text-white flex items-center justify-center text-2xl font-bold">
+                <div className="mb-6">
+                    <h1 className="text-xl font-bold text-gray-900">
+                        আমার প্রোফাইল
+                    </h1>
+                    <p className="text-sm text-gray-500 mt-1">
+                        আপনার ব্যক্তিগত তথ্য দেখুন
+                    </p>
+                </div>
+
+                {/* User Info Card */}
+                <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg mb-6">
+                    <div className="w-14 h-14 rounded-full bg-[#05893E] text-white flex items-center justify-center text-xl font-bold">
                         {initial}
                     </div>
-                    <div className="flex-1">
-                        <h1 className="text-xl font-bold">{user.name}</h1>
-                        <p className="text-sm text-gray-500">{user.email}</p>
+                    <div className="flex-1 min-w-0">
+                        <h2 className="font-semibold text-gray-900 truncate">
+                            {user.name}
+                        </h2>
+                        <p className="text-sm text-gray-500 truncate">
+                            {user.email}
+                        </p>
                     </div>
-                </div>
-
-                {/* Info */}
-                <div className="mt-5 space-y-3 text-sm">
-                    <div className="flex justify-between py-2 border-b">
-                        <span className="text-gray-600">নাম</span>
-                        <span className="font-medium">{user.name}</span>
-                    </div>
-                    <div className="flex justify-between py-2 border-b">
-                        <span className="text-gray-600">ইমেইল</span>
-                        <span className="font-medium">{user.email}</span>
-                    </div>
-                    <div className="flex justify-between py-2 border-b">
-                        <span className="text-gray-600">ইমেইল ভেরিফাইড</span>
-                        <span className="font-medium">
-                            {user.emailVerified ? '✅ হ্যাঁ' : '❌ না'}
-                        </span>
-                    </div>
-                </div>
-
-                {/* Update button */}
-                <div className="mt-6">
                     <Link
                         href="/profile/update"
-                        className="block w-full text-center btn bg-[#05893E] text-white hover:bg-[#046b30]"
+                        className="text-xs font-medium px-3 py-1.5 border border-[#05893E] text-[#05893E] rounded-md hover:bg-[#05893E] hover:text-white transition-colors whitespace-nowrap"
                     >
-                        প্রোফাইল আপডেট করুন
+                        এডিট করুন
                     </Link>
+                </div>
+
+                {/* Section */}
+                <div>
+                    <h2 className="text-sm font-semibold text-gray-700 mb-3">
+                        তথ্য
+                    </h2>
+
+                    <ProfileUpdateForm initialName={user.name || ''} />
                 </div>
             </div>
         </div>
